@@ -6,6 +6,9 @@ public class BarrileteMovement : MonoBehaviour
 {
     public Transform[] elements;
     public Transform[] transitionElements;
+    public Transform[] ramitas1;
+    public Transform[] ramitas2;
+    public Transform[] ramitas3;
     public Camera mainCamera;
     public float transitionDuration = 10.0f; // Duración de la transición en segundos
 
@@ -14,6 +17,10 @@ public class BarrileteMovement : MonoBehaviour
     private bool subiendo = false;
     private Vector2[] posicionInicial;
     private Vector3 cameraInitialPosition;
+    private Vector2[] posicionRamitas1;
+    private Vector2[] posicionRamitas2;
+    private Vector2[] posicionRamitas3;
+    public float posicionfinalRamitas;
 
     public float velHorizontal = 1.0f; // Velocidad horizontal de los elementos
     public float ampHorizontal = 0.5f; // Amplitud del movimiento horizontal
@@ -21,6 +28,27 @@ public class BarrileteMovement : MonoBehaviour
     private void Start()
     {
         posicionInicial = new Vector2[elements.Length];
+        posicionRamitas1 = new Vector2[ramitas1.Length];
+        posicionRamitas2 = new Vector2[ramitas2.Length];
+        posicionRamitas3 = new Vector2[ramitas3.Length];
+        posicionfinalRamitas = 0f;
+
+        for (int i = 0; i < ramitas1.Length; i++)
+        {
+            ramitas1[i].gameObject.SetActive(false);
+            posicionRamitas1[i] = ramitas1[i].position;
+        }
+        for (int i = 0; i < ramitas2.Length; i++)
+        {
+            ramitas2[i].gameObject.SetActive(false);
+            posicionRamitas2[i] = ramitas2[i].position;
+        }
+        for (int i = 0; i < ramitas3.Length; i++)
+        {
+            ramitas3[i].gameObject.SetActive(false);
+            posicionRamitas3[i] = ramitas3[i].position;
+        }
+
         for (int i = 0; i < elements.Length; i++)
         {
             posicionInicial[i] = elements[i].position;
@@ -46,6 +74,7 @@ public class BarrileteMovement : MonoBehaviour
         if (contadordeClicks <= clicks)
         {
             MovHorizontal();
+            Caer();
         }
         else
         {
@@ -108,6 +137,87 @@ public class BarrileteMovement : MonoBehaviour
         }
     }
 
+    private void Caer()
+    {
+        if (contadordeClicks == 3)
+        {
+            for (int i = 0; i < ramitas1.Length; i++)
+            {
+                ramitas1[i].gameObject.SetActive(true);
+
+                ramitas1[i].position = posicionRamitas1[i];
+                Vector2 targetPosition2 = ramitas1[i].position;
+                targetPosition2.y -= 1f * Time.deltaTime;
+
+                float xOffset = Mathf.Sin(Time.time * velHorizontal) * ampHorizontal;
+                targetPosition2.x += xOffset * Time.deltaTime;
+
+                ramitas1[i].position = targetPosition2;
+
+                if (ramitas1[i].position.y <= posicionfinalRamitas)
+                {
+                    Rigidbody2D rb = ramitas1[i].GetComponent<Rigidbody2D>();
+                    if (rb != null)
+                    {
+                        rb.isKinematic = true;
+                    }
+                }
+            }
+        }
+        if (contadordeClicks == 6)
+        {
+            
+            for (int i = 0; i < ramitas2.Length; i++)
+            {
+                ramitas2[i].gameObject.SetActive(true);
+
+                ramitas2[i].position = posicionRamitas2[i];
+                Vector2 targetPosition3 = ramitas2[i].position;
+                targetPosition3.y -= 1f * Time.deltaTime;
+
+                float xOffset = Mathf.Sin(Time.time * velHorizontal) * ampHorizontal;
+                targetPosition3.x += xOffset * Time.deltaTime;
+
+                ramitas2[i].position = targetPosition3;
+
+                if (ramitas2[i].position.y <= posicionfinalRamitas)
+                {
+                    Rigidbody2D rb = ramitas2[i].GetComponent<Rigidbody2D>();
+                    if (rb != null)
+                    {
+                        rb.isKinematic = true;
+                    }
+                }
+            }
+        }
+        if (contadordeClicks == 9)
+        {
+            
+            for (int i = 0; i < ramitas3.Length; i++)
+            {
+                ramitas3[i].gameObject.SetActive(true);
+
+                ramitas3[i].position = posicionRamitas3[i];
+                Vector2 targetPosition4 = ramitas3[i].position;
+                targetPosition4.y -= 1f * Time.deltaTime;
+
+                float xOffset = Mathf.Sin(Time.time * velHorizontal) * ampHorizontal;
+                targetPosition4.x += xOffset * Time.deltaTime;
+
+                ramitas3[i].position = targetPosition4;
+
+                if (ramitas3[i].position.y <= posicionfinalRamitas)
+                {
+                    Rigidbody2D rb = ramitas3[i].GetComponent<Rigidbody2D>();
+                    if (rb != null)
+                    {
+                        rb.isKinematic = true;
+                    }
+                }
+            }
+        }
+    }
+
     private void MoveCameraUp()
     {
         Vector3 targetPosition = mainCamera.transform.position;
@@ -117,6 +227,22 @@ public class BarrileteMovement : MonoBehaviour
 
     private void ResetElements()
     {
+        for (int i = 0; i < ramitas1.Length; i++)
+        {
+            ramitas1[i].gameObject.SetActive(false);
+            ramitas1[i].position = posicionRamitas1[i];
+        }
+        for (int i = 0; i < ramitas2.Length; i++)
+        {
+            ramitas2[i].gameObject.SetActive(false);
+            ramitas2[i].position = posicionRamitas2[i];
+        }
+        for (int i = 0; i < ramitas3.Length; i++)
+        {
+            ramitas3[i].gameObject.SetActive(false);
+            ramitas3[i].position = posicionRamitas3[i];
+        }
+
         for (int i = 0; i < elements.Length; i++)
         {
             elements[i].gameObject.SetActive(true);
